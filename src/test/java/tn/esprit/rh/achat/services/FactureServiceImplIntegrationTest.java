@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class FactureServiceImplIntegrationTest {
 
-```
 @Autowired
 FactureServiceImpl factureService;
 
@@ -47,10 +46,9 @@ void testCancelFacture() {
     f = factureRepository.save(f);
 
     factureService.cancelFacture(f.getIdFacture());
-    Facture updated = factureRepository.findById(f.getIdFacture()).orElseThrow();
+    Facture updated = factureRepository.findById(f.getIdFacture()).orElseThrow(null);
 
     assertTrue(updated.getArchivee());
 }
-```
 
 }
