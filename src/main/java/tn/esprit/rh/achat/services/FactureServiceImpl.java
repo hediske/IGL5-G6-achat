@@ -85,7 +85,7 @@ public class FactureServiceImpl implements IFactureService {
 	@Override
 	public Facture retrieveFacture(Long factureId) {
 
-		Facture facture = factureRepository.findById(factureId).orElseThrow(() -> new RuntimeException("Fournisseur not found with id " + idFournisseur));
+		Facture facture = factureRepository.findById(factureId).orElseThrow(() -> new RuntimeException("Facture not found with id " + factureId));
 		log.info("facture :" + facture);
 		return facture;
 	}

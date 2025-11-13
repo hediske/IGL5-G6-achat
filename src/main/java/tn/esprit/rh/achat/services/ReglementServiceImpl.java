@@ -33,7 +33,6 @@ public class ReglementServiceImpl implements IReglementService {
 		
 		return reglement;
 	}
-
 	@Override
 	public List<Reglement> retrieveReglementByFacture(Long idFacture) {
 		List<Reglement> reglements= reglementRepository.retrieveReglementByFacture(idFacture);
