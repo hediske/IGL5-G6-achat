@@ -38,8 +38,6 @@ public class ProduitServiceImpl implements IProduitService {
 		return p;
 	}
 
-	
-
 	@Override
 	public void deleteProduit(Long produitId) {
 		produitRepository.deleteById(produitId);
@@ -52,19 +50,19 @@ public class ProduitServiceImpl implements IProduitService {
 
 	@Override
 	public Produit retrieveProduit(Long produitId) {
-		Produit produit = produitRepository.findById(produitId).orElse(null);
+		Produit produit = produitRepository.findById(produitId)
+				.orElseThrow(() -> new RuntimeException("Produit not found with id: " + produitId));
 		log.info("produit :" + produit);
 		return produit;
 	}
 
 	@Override
 	public void assignProduitToStock(Long idProduit, Long idStock) {
-		Produit produit = produitRepository.findById(idProduit).orElse(null);
-		Stock stock = stockRepository.findById(idStock).orElse(null);
+		Produit produit = produitRepository.findById(idProduit)
+				.orElseThrow(() -> new RuntimeException("Produit not found with id: " + idProduit));
+		Stock stock = stockRepository.findById(idStock)
+				.orElseThrow(() -> new RuntimeException("Stock not found with id: " + idStock));
 		produit.setStock(stock);
 		produitRepository.save(produit);
-
 	}
-
-
 }

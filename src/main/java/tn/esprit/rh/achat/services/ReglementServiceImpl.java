@@ -29,7 +29,7 @@ public class ReglementServiceImpl implements IReglementService {
 
 	@Override
 	public Reglement retrieveReglement(Long id) {
-		Reglement reglement = reglementRepository.findById(id).orElse(null);
+		Reglement reglement = reglementRepository.findById(id).orElseThrow(() -> new RuntimeException("Reglement not found"));
 		
 		return reglement;
 	}

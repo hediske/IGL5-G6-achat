@@ -57,7 +57,7 @@ public class StockServiceImpl implements IStockService {
 	public Stock retrieveStock(Long stockId) {
 		long start = System.currentTimeMillis();
 		log.info("In method retrieveStock");
-		Stock stock = stockRepository.findById(stockId).orElse(null);
+		Stock stock = stockRepository.findById(stockId).orElseThrow(() -> new RuntimeException("Stock not found with id: " + stockId));
 		log.info("out of method retrieveStock");
 		 long elapsedTime = System.currentTimeMillis() - start;
 		log.info("Method execution time: " + elapsedTime + " milliseconds.");
