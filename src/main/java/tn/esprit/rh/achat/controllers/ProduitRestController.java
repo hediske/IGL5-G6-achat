@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.rh.achat.entities.Produit;
 import tn.esprit.rh.achat.services.IProduitService;
-
+import tn.esprit.rh.achat.dtos.ProduitDTO;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -21,25 +22,23 @@ public class ProduitRestController {
 	// http://localhost:8089/SpringMVC/produit/retrieve-all-produits
 	@GetMapping("/retrieve-all-produits")
 	@ResponseBody
-	public List<Produit> getProduits() {
-		List<Produit> list = produitService.retrieveAllProduits();
-		return list;
+	public List<ProduitDTO> getProduits() {
+		return produitService.retrieveAllProduits().stream().map(this::toDto).collect(Collectors.toList());
 	}
 
 	// http://localhost:8089/SpringMVC/produit/retrieve-produit/8
 	@GetMapping("/retrieve-produit/{produit-id}")
 	@ResponseBody
-	public Produit retrieveRayon(@PathVariable("produit-id") Long produitId) {
-		return produitService.retrieveProduit(produitId);
+	public ProduitDTO retrieveRayon(@PathVariable("produit-id") Long produitId) {
+		return toDto(produitService.retrieveProduit(produitId));
 	}
 
 	/* Ajouter en produit tout en lui affectant la catégorie produit et le stock associés */
 	// http://localhost:8089/SpringMVC/produit/add-produit/{idCategorieProduit}/{idStock}
 	@PostMapping("/add-produit")
 	@ResponseBody
-	public Produit addProduit(@RequestBody Produit p) {
-		Produit produit = produitService.addProduit(p);
-		return produit;
+	public ProduitDTO addProduit(@RequestBody ProduitDTO p) {
+		return toDto(produitService.addProduit(toEntity(p)));
 	}
 
 	// http://localhost:8089/SpringMVC/produit/remove-produit/{produit-id}
@@ -52,8 +51,8 @@ public class ProduitRestController {
 	// http://localhost:8089/SpringMVC/produit/modify-produit/{idCategorieProduit}/{idStock}
 	@PutMapping("/modify-produit")
 	@ResponseBody
-	public Produit modifyProduit(@RequestBody Produit p) {
-		return produitService.updateProduit(p);
+	public ProduitDTO modifyProduit(@RequestBody ProduitDTO p) {
+		return toDto(produitService.updateProduit(toEntity(p)));
 	}
 
 	/*
@@ -78,5 +77,27 @@ public class ProduitRestController {
 
 		return produitService.getRevenuBrutProduit(idProduit, startDate, endDate);
 	}*/
+
+	private ProduitDTO toDto(Produit e) {
+		if (e == null) return null;
+		ProduitDTO d = new ProduitDTO();
+		d.setIdProduit(e.getIdProduit());
+		d.setCode(e.getCodeProduit());
+		d.setLibelle(e.getLibelleProduit());
+		d.setPrixUnitaire(e.getPrix());
+		d.setCategorieProduitId(e.getCategorieProduit() != null ? e.getCategorieProduit().getIdCategorieProduit() : null);
+		d.setStockId(e.getStock() != null ? e.getStock().getIdStock() : null);
+		return d;
+	}
+	private Produit toEntity(ProduitDTO d) {
+		if (d == null) return null;
+		Produit e = new Produit();
+		e.setIdProduit(d.getIdProduit());
+		e.setCodeProduit(d.getCode());
+		e.setLibelleProduit(d.getLibelle());
+		e.setPrix(d.getPrixUnitaire());
+		// set refs via service layer if needed (ids carried in dto)
+		return e;
+	}
 
 }
