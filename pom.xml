@@ -8,6 +8,34 @@
 		<version>2.5.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+
+		<repositories>
+			<repository>
+				<id>central</id>
+				<url>http://nexus:8081/repository/maven-public/</url>
+			</repository>
+		</repositories>
+
+		<pluginRepositories>
+			<pluginRepository>
+				<id>central</id>
+				<url>http://nexus:8081/repository/maven-public/</url>
+			</pluginRepository>
+		</pluginRepositories>
+
+		<distributionManagement>
+			<repository>
+				<id>nexus-releases</id>
+				<url>http://nexus:8081/repository/maven-releases/</url>
+			</repository>
+
+			<snapshotRepository>
+				<id>nexus-snapshots</id>
+				<url>http://nexus:8081/repository/maven-snapshots/</url>
+			</snapshotRepository>
+		</distributionManagement>
+
+
 	<groupId>tn.esprit.rh</groupId>
 	<artifactId>achat</artifactId>
 	<version>1.0</version>
