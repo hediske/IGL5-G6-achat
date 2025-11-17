@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: achat-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: achat-app
+  template:
+    metadata:
+      labels:
+        app: achat-app
+    spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for MySQL..."
+              until nc -z mysql-db 3306; do
+                echo "MySQL is unavailable - sleeping"
+                sleep 2
+              done
+              echo "MySQL is up - continuing"
+      containers:
+        - name: achat-app
+          image: hediske/igl5-g6-achat:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8089
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql-db:3306/achatdb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: root
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: achat-app-service
+spec:
+  selector:
+    app: achat-app
+  ports:
+    - protocol: TCP
+      port: 8089
+      targetPort: 8089
+  type: LoadBalancer
+
