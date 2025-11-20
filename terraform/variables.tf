@@ -26,5 +26,5 @@ variable "desired_capacity" {
 variable "lab_role_arn" {
   description = "ARN of the existing LabRole from AWS Academy"
   type        = string
-  default     = "arn:aws:iam::593182207312:role/LabRole"
+  default     = "arn:aws:iam::236912019500:role/LabRole"
 }
