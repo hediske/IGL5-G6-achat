@@ -99,6 +99,11 @@
     role_arn = var.lab_role_arn
     version  = "1.29"
 
+      cluster_upgrade_policy = {
+        support_type = "STANDARD"
+      }
+
+
     vpc_config {
       subnet_ids              = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
       endpoint_public_access  = true
